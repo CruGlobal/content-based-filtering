@@ -1,0 +1,40 @@
+{
+  "name": "content-based-filtering",
+  "version": "1.0.0",
+  "description": "Content Based Filtering",
+  "scripts": {
+    "lint": "standard || exit 0",
+    "lint:fix": "standard --fix || exit 0",
+    "test": "node --use_strict ./node_modules/jest/bin/jest --forceExit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CruGlobal/content-based-filtering.git"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@google-cloud/bigquery": "^4.7.0",
+    "debug": "^4.1.1",
+    "lodash": "^4.17.19",
+    "rollbar": "^2.19.2"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "dotenv": "^8.1.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "serverless": "^1.74.1",
+    "standard": "^14.2.0"
+  },
+  "standard": {
+    "env": {
+      "node": true,
+      "jest": true
+    }
+  }
+}

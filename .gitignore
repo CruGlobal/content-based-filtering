@@ -1,0 +1,8 @@
+# package directories
+node_modules
+
+# dotenv environment variables file
+*.env
+
+# IDE directories
+.idea
