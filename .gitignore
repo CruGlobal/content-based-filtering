@@ -4,5 +4,11 @@ node_modules
 # dotenv environment variables file
 *.env
 
+# Secrets
+service-account.json
+
 # IDE directories
 .idea
+
+# Compiled files
+.build/

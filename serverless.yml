@@ -1,9 +1,13 @@
 service: content-based-filtering
 
+useDotenv: true
+plugins:
+  - serverless-plugin-typescript
+
 provider:
   name: aws
   stage: ${env:ENVIRONMENT}
-  runtime: nodejs12.x
+  runtime: nodejs14.x
   region: us-east-1
   vpc:
     securityGroupIds:
@@ -16,7 +20,6 @@ provider:
     env: ${self:custom.environmentMap.${env:ENVIRONMENT}}
     managed_by: serverless-framework
     function: lambda
-  environment: ${file(serverless/environment.js)}
 
 package:
   individually: true
@@ -36,7 +39,7 @@ custom:
 
 functions:
   handler:
-    handler: index.handler
+    handler: src/index.handler
     events:
       # Run every 30 minutes.
       - schedule: cron(0/30 * * * ? *)
