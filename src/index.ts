@@ -15,9 +15,6 @@ export async function handler() {
 
     const lockfile: Lockfile = await loadLockfile();
 
-    let putRecordCount = 0;
-    let deletedRecordCount = 0;
-
     console.info('Running changed recommendations query on BigQuery...');
     const bigQuery = new BigQuery();
     const stream: AsyncIterable<Recommendation> = bigQuery.createQueryStream({
@@ -33,7 +30,10 @@ export async function handler() {
       types: { lockfile: [{ uri: 'string', payloadHash: 'string' }] },
     });
 
-    for await (const recommendation of stream) {
+    let putRecordCount = 0;
+    let deletedRecordCount = 0;
+
+    const sendRecommendationToS3 = async (recommendation: Recommendation) => {
       switch (recommendation.operation) {
         case OperationEnum.Create:
         case OperationEnum.Update:
@@ -50,10 +50,26 @@ export async function handler() {
           rollbar.error('Unexpected operation value', recommendation);
           break;
       }
+
+      const s3RecordsUpdated = putRecordCount + deletedRecordCount;
+      if (s3RecordsUpdated % 100 === 0) {
+        console.info(`${s3RecordsUpdated} S3 records updated`);
+      }
+    };
+
+    const recommendations: Promise<void>[] = [];
+    for await (const recommendation of stream) {
+      recommendations.push(sendRecommendationToS3(recommendation));
     }
-    console.info('All rows retrieved.');
+    console.info(`${recommendations.length} rows retrieved.`);
+
+    await Promise.all(recommendations);
+
     console.info(`${putRecordCount} recommendations pushed to S3.`);
     console.info(`${deletedRecordCount} recommendations deleted from S3.`);
+    if (putRecordCount + deletedRecordCount !== recommendations.length) {
+      console.warn('Mismatch between rows retrieved and S3 objects modified');
+    }
     if (putRecordCount > 0 || deletedRecordCount > 0) {
       await saveLockfile(lockfile);
     }

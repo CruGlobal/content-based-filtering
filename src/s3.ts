@@ -29,7 +29,7 @@ export const deleteRecommendation = (recommendation: Recommendation) => {
     .promise();
 };
 export const loadLockfile = async (): Promise<Lockfile> => {
-  console.log('Loading lockfile...');
+  console.info('Loading lockfile...');
   try {
     const lockfileString = (
       await s3
@@ -42,11 +42,11 @@ export const loadLockfile = async (): Promise<Lockfile> => {
 
     const lockfile = lockfileString ? JSON.parse(lockfileString) : {};
 
-    console.log('Lockfile loaded.');
+    console.info('Lockfile loaded.');
     return lockfile;
   } catch (error) {
     if ((error as AWS.AWSError).code === 'NoSuchKey') {
-      console.log("Lockfile doesn't exist. Skipping...");
+      console.info("Lockfile doesn't exist. Skipping...");
       return {};
     } else {
       throw error;
