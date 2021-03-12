@@ -1,8 +1,11 @@
 # package directories
 node_modules
 
-# dotenv environment variables file
+# dotenv environment variables files
 *.env
+.env.*
+# .env used as template
+!.env
 
 # Secrets
 service-account.json

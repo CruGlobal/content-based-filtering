@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Content Based Filtering",
   "scripts": {
-    "start": "serverless invoke local --function handler",
+    "start": "ENVIRONMENT=development serverless invoke local --function handler",
     "lint": "standard || exit 0",
     "lint:fix": "standard --fix || exit 0",
     "test": "jest"
