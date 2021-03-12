@@ -27,6 +27,8 @@ export async function handler() {
           payloadHash,
         })),
       },
+      // @ts-ignore package typings are wrong
+      types: { lockfile: [{ uri: 'string', payloadHash: 'INT64' }] },
     });
 
     for await (const recommendation of stream) {
