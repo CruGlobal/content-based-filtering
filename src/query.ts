@@ -1,7 +1,16 @@
+// FARM_FINGERPRINT(...) is wrapped in ToHex(...) from https://stackoverflow.com/a/51600210/665224
+// because FARM_FINGERPRINT outputs a signed 64 bit integer instead of unsigned https://github.com/lovell/farmhash/issues/26
+// which was dropping bits when resending the hash to BigQuery and comparing
+
 export const query = `
+CREATE TEMP FUNCTION ToHex(x INT64) AS (
+  (SELECT STRING_AGG(FORMAT('%02x', x >> (byte * 8) & 0xff), '' ORDER BY byte DESC)
+   FROM UNNEST(GENERATE_ARRAY(0, 7)) AS byte)
+);
+
 WITH
     newData AS (
-        SELECT uri, payload, FARM_FINGERPRINT(payload) as payloadHash FROM (
+        SELECT uri, payload, ToHex(FARM_FINGERPRINT(payload)) as payloadHash FROM (
             SELECT
             original_url as uri,
             CONCAT(
@@ -26,7 +35,6 @@ WITH
             ) as payload
             FROM \`${process.env.BIGQUERY_TABLE_NAME}\`
             GROUP BY original_url
-            LIMIT 3 # Temporary limit for development
         )
     ),
     existingData AS (
@@ -38,10 +46,10 @@ newData.payload,
 newData.payloadHash,
 CASE
     WHEN newData.uri is NULL THEN 'delete'
-    WHEN newData.uri = existingData.uri THEN 'update'
     WHEN existingData.uri is NULL THEN 'create'
+    ELSE 'update'
 END as operation
 FROM newData
 FULL OUTER JOIN existingData ON newData.uri = existingData.uri
-WHERE IFNULL(newData.payloadHash != existingData.payloadHash, true)
+WHERE newData.payloadHash IS DISTINCT FROM existingData.payloadHash
 `;

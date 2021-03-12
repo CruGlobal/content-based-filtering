@@ -15,9 +15,11 @@ export async function handler() {
 
     const lockfile: Lockfile = await loadLockfile();
 
-    console.info('Connecting to BigQuery...');
-    const bigQuery = new BigQuery();
+    let putRecordCount = 0;
+    let deletedRecordCount = 0;
 
+    console.info('Running changed recommendations query on BigQuery...');
+    const bigQuery = new BigQuery();
     const stream: AsyncIterable<Recommendation> = bigQuery.createQueryStream({
       query,
       parameterMode: 'NAMED',
@@ -27,8 +29,8 @@ export async function handler() {
           payloadHash,
         })),
       },
-      // @ts-ignore package typings are wrong
-      types: { lockfile: [{ uri: 'string', payloadHash: 'INT64' }] },
+      // @ts-ignore package typings aren't complete
+      types: { lockfile: [{ uri: 'string', payloadHash: 'string' }] },
     });
 
     for await (const recommendation of stream) {
@@ -37,10 +39,12 @@ export async function handler() {
         case OperationEnum.Update:
           await putRecommendation(recommendation);
           lockfile[recommendation.uri] = recommendation.payloadHash;
+          putRecordCount++;
           break;
         case OperationEnum.Delete:
           await deleteRecommendation(recommendation);
           delete lockfile[recommendation.uri];
+          deletedRecordCount++;
           break;
         default:
           rollbar.error('Unexpected operation value', recommendation);
@@ -48,7 +52,11 @@ export async function handler() {
       }
     }
     console.info('All rows retrieved.');
-    await saveLockfile(lockfile);
+    console.info(`${putRecordCount} recommendations pushed to S3.`);
+    console.info(`${deletedRecordCount} recommendations deleted from S3.`);
+    if (putRecordCount > 0 || deletedRecordCount > 0) {
+      await saveLockfile(lockfile);
+    }
     console.info('Done.');
   } catch (error) {
     console.error(error);
