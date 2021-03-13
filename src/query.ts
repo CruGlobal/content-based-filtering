@@ -1,3 +1,8 @@
+const tableName = process.env.BIGQUERY_TABLE_NAME;
+if (!tableName) {
+  throw new Error('BIGQUERY_TABLE_NAME env var was not set');
+}
+
 // FARM_FINGERPRINT(...) is wrapped in ToHex(...) from https://stackoverflow.com/a/51600210/665224
 // because FARM_FINGERPRINT outputs a signed 64 bit integer instead of unsigned https://github.com/lovell/farmhash/issues/26
 // which was dropping bits when resending the hash to BigQuery and comparing
@@ -33,7 +38,7 @@ WITH
                 ),
                 ']'
             ) as payload
-            FROM \`${process.env.BIGQUERY_TABLE_NAME}\`
+            FROM \`${tableName}\`
             GROUP BY original_url
         )
     ),
