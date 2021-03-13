@@ -12,23 +12,17 @@
     "type": "git",
     "url": "git@github.com:CruGlobal/content-based-filtering.git"
   },
-  "main": "index.js",
+  "main": "src/index.ts",
   "keywords": [],
-  "author": "",
+  "author": "Scotty Waggoner <ozzieorca@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
     "@google-cloud/bigquery": "^5.5.0",
     "aws-sdk": "^2.862.0",
-    "debug": "^4.1.1",
-    "lodash": "^4.17.19",
     "rollbar": "^2.19.2"
   },
   "devDependencies": {
-    "babel-eslint": "^10.0.3",
-    "eslint": "^7.21.0",
     "jest": "^26.6.3",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
     "serverless": "^2.29.0",
     "serverless-plugin-typescript": "^1.1.9",
     "standard": "^16.0.3",
