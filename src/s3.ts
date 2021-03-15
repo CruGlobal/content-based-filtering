@@ -14,7 +14,7 @@ export const putRecommendation = (recommendation: Recommendation) => {
   return s3
     .putObject({
       Bucket,
-      Key: `${encodeURIComponent(recommendation.uri)}.json`,
+      Key: `${recommendation.uri}.json`,
       Body: recommendation.payload,
       ACL: 'public-read',
     })
@@ -24,7 +24,7 @@ export const deleteRecommendation = (recommendation: Recommendation) => {
   return s3
     .deleteObject({
       Bucket,
-      Key: `${encodeURIComponent(recommendation.uri)}.json`,
+      Key: `${recommendation.uri}.json`,
     })
     .promise();
 };
