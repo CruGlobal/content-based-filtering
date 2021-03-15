@@ -27,8 +27,7 @@ WITH
                                 recommendation_url as uri,
                                 recommendation_title as title,
                                 recommendation_image_url as imageUri,
-                                recommendation_display_category as category,
-                                recommendation_number as number
+                                recommendation_display_category as category
                             )
                         )
                         ORDER BY recommendation_number
