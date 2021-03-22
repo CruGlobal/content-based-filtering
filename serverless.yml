@@ -41,5 +41,7 @@ functions:
   handler:
     handler: src/index.handler
     events:
-      # Run every 30 minutes.
-      - schedule: cron(0/30 * * * ? *)
+      - http: # See https://www.serverless.com/framework/docs/providers/aws/events/apigateway/
+          path: webhook
+          method: post
+          cors: true # See https://www.serverless.com/framework/docs/providers/aws/events/apigateway#enabling-cors
