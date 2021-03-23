@@ -1,6 +1,5 @@
 service: content-based-filtering
 
-useDotenv: true
 plugins:
   - serverless-plugin-typescript
 
@@ -20,6 +19,7 @@ provider:
     env: ${self:custom.environmentMap.${env:ENVIRONMENT}}
     managed_by: serverless-framework
     function: lambda
+  environment: ${file(env.js)}
 
 package:
   individually: true

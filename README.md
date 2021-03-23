@@ -19,4 +19,4 @@ Queries BigQuery for recommendations that need to be pushed to S3
 1. Copy `.env` to `.env.development` and fill in missing environment variables
 2. Run `yarn` to install dependencies
 3. Run `yarn start` to run function locally using a `stage` of `development` (configured in start script in `package.json`)
-4. Use `assume-role -e staging -n fancy-api -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS secrets locally
+4. Use `assume-role -e staging -n content-based-filtering -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS staging secrets locally
