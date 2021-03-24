@@ -8,10 +8,11 @@ node_modules
 !.env
 
 # Secrets
-service-account.json
+keyfile.json
 
 # IDE directories
 .idea
 
 # Compiled files
 .build/
+.serverless/
