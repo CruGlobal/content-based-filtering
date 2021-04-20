@@ -20,6 +20,15 @@ provider:
     managed_by: serverless-framework
     function: lambda
   environment: ${file(env.js)}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:DeleteObject
+      Resource:
+        - arn:aws:s3:::${env:S3_BUCKET_NAME}
+        - arn:aws:s3:::${env:S3_BUCKET_NAME}/*
 
 package:
   individually: true
