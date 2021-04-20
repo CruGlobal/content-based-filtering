@@ -74,6 +74,22 @@ export async function handler() {
       await saveLockfile(lockfile);
     }
     console.info('Done.');
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: 'Successfully copied records from BigQuery to S3',
+          results: {
+            rowsRetrieved: recommendations.length,
+            recordsPushed: putRecordCount,
+            recordsDeleted: deletedRecordCount,
+          },
+        },
+        null,
+        2,
+      ),
+    };
   } catch (error) {
     console.error(error);
     await rollbar.error(error.message, error);
