@@ -31,8 +31,9 @@ provider:
         - arn:aws:s3:::${env:S3_BUCKET_NAME}/*
   apiGateway:
     apiKeys:
-      - name: webhookApiKey
+      - name: ${env:PROJECT_NAME}-${self:custom.environmentMap.${env:ENVIRONMENT}}-webhookApiKey
         description: API Key for authorizing webhook requests
+        value: ${env:WEBHOOK_API_KEY}
     usagePlan:
       quota:
         limit: 3000
