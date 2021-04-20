@@ -32,9 +32,9 @@ provider:
 
 package:
   individually: true
+  include:
+    - keyfile.json
   exclude:
-    - .serverless/**
-    - .git/**
     - test/**
     - '**/*.test.js'
     - .deployment/**
