@@ -65,6 +65,7 @@ functions:
     handler: src/index.handler
     timeout: 30
     events:
+      - schedule: rate(10 minutes)
       - http: # See https://www.serverless.com/framework/docs/providers/aws/events/apigateway/
           path: webhook
           method: post
