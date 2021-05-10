@@ -17,14 +17,14 @@ WITH
     newData AS (
         SELECT uri, payload, ToHex(FARM_FINGERPRINT(payload)) as payloadHash FROM (
             SELECT
-            original_url as uri,
+            original_page_url as uri,
             CONCAT(
                 '[',
                 ARRAY_TO_STRING(
                     ARRAY_AGG(
                         TO_JSON_STRING(
                             STRUCT(
-                                recommendation_url as uri,
+                                recommendation_page_url as uri,
                                 recommendation_title as title,
                                 recommendation_image_url as imageUri,
                                 recommendation_display_category as category
@@ -38,7 +38,7 @@ WITH
                 ']'
             ) as payload
             FROM \`${tableName}\`
-            GROUP BY original_url
+            GROUP BY original_page_url
         )
     ),
     existingData AS (
