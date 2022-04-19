@@ -1,17 +1,20 @@
 service: content-based-filtering
-
+frameworkVersion: '3'
+configValidationMode: error
 plugins:
   - serverless-plugin-typescript
 
 provider:
   name: aws
   stage: ${env:ENVIRONMENT}
-  runtime: nodejs14.x
   region: us-east-1
   vpc:
     securityGroupIds:
-      - ${file(${env:ECS_CONFIG}/bin/vars.yml):us-east-1.webapp_elb_sg}
-    subnetIds: ${file(${env:ECS_CONFIG}/bin/vars.yml):us-east-1.prod_apps_1_all}
+      - sg-888294ed
+    subnetIds:
+      - subnet-f2c2dfda # us-east-1a
+      - subnet-1508db62 # us-east-1b
+      - subnet-3fd94266 # us-east-1c
   stackTags:
     Name: ${env:PROJECT_NAME}-${self:custom.environmentMap.${env:ENVIRONMENT}}
     owner: apps@cru.org
@@ -19,18 +22,19 @@ provider:
     env: ${self:custom.environmentMap.${env:ENVIRONMENT}}
     managed_by: serverless-framework
     function: lambda
-  environment: ${file(env.js)}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - s3:PutObject
-        - s3:PutObjectAcl
-        - s3:GetObject
-        - s3:DeleteObject
-        - s3:ListBucket
-      Resource:
-        - arn:aws:s3:::${env:S3_BUCKET_NAME}
-        - arn:aws:s3:::${env:S3_BUCKET_NAME}/*
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:PutObjectAcl
+            - s3:GetObject
+            - s3:DeleteObject
+            - s3:ListBucket
+          Resource:
+            - arn:aws:s3:::${env:S3_BUCKET_NAME}
+            - arn:aws:s3:::${env:S3_BUCKET_NAME}/*
   apiGateway:
     apiKeys:
       - name: ${env:PROJECT_NAME}-${self:custom.environmentMap.${env:ENVIRONMENT}}-webhookApiKey
@@ -43,15 +47,17 @@ provider:
       throttle:
         burstLimit: 1
         rateLimit: 1
+  environment: ${file(env.js)}
+  layers:
+    - arn:aws:lambda:us-east-1:072686360478:layer:node-16_14_2:1
 
 package:
   individually: true
-  include:
-    - keyfile.json
-  exclude:
-    - test/**
-    - '**/*.test.js'
-    - .deployment/**
+  patterns:
+    - 'keyfile.json'
+    - '!test/**'
+    - '!**/*.test.js'
+    - '!.deployment/**'
 
 custom:
   environmentMap:
