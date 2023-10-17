@@ -92,6 +92,6 @@ export async function handler() {
     };
   } catch (error) {
     console.error(error);
-    await rollbar.error(error.message, error);
+    await rollbar.error((error as Error).message, error as Error);
   }
 }
