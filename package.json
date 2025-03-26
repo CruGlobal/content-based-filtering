@@ -34,5 +34,6 @@
       "node": true,
       "jest": true
     }
-  }
+  },
+  "packageManager": "yarn@4.7.0"
 }
