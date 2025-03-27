@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  typescript:
+    runs-on: ubuntu-latest
+    name: ✅ TypeScript Lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .tool-versions
+      - name: Enable Corepack
+        run: corepack enable
+      - name: 📦 Install Dependencies
+        run: yarn install
+
+      - name: ✅ TypeScript lint
+        run: yarn lint:ts

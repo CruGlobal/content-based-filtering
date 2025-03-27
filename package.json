@@ -6,6 +6,7 @@
     "start": "PROJECT_NAME=content-based-filtering ENVIRONMENT=development serverless invoke local --function handler",
     "lint": "standard || exit 0",
     "lint:fix": "standard --fix || exit 0",
+    "lint:ts": "tsc --noEmit",
     "test": "jest"
   },
   "repository": {
