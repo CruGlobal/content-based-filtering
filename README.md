@@ -16,7 +16,32 @@ Queries BigQuery for recommendations that need to be pushed to S3
 
 ## Project setup
 
+### Setting up Node
+
+First, make sure that you have a suitable version of Node.js. This project uses node v20.17.0. To check your node version, run `node --version`. If you don't have node v20.17.0 installed or a suitable version, the recommended way to install it is with [asdf](https://asdf-vm.com/), a development tool version manager.
+
+```bash
+# Install asdf and the node plugin
+brew install asdf
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+
+# Integrate it with your shell
+# ZSH shell integration is shown here, but for installation instructions for other shells, go to https://asdf-vm.com/guide/getting-started.html#_3-install-asdf
+echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+
+# IMPORTANT: Close that terminal tab/window and open another one to apply the changes to your shell configuration file
+
+# Install the version of node defined in this project's .tool-versions file
+asdf install nodejs
+
+# Check that the node version is now 20.17.0
+node --version
+```
+
+### Running the local server
+
 1. Copy `.env` to `.env.development` and fill in missing environment variables
-2. Run `yarn` to install dependencies
-3. Run `yarn start` to run function locally using a `stage` of `development` (configured in start script in `package.json`)
-4. Use `assume-role -e staging -n content-based-filtering -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS staging secrets locally
+2. Run `corepack enable` to ensure you have corepack enabled.
+3. Run `yarn` to install dependencies
+4. Run `yarn start` to run function locally using an environment of `development` (configured in start script in `package.json`)
+5. Use `assume-role -e staging -n content-based-filtering -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS staging secrets locally
