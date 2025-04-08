@@ -41,7 +41,10 @@ node --version
 ### Running the local server
 
 1. Copy `.env` to `.env.development` and fill in missing environment variables
-2. Run `corepack enable` to ensure you have corepack enabled.
-3. Run `yarn` to install dependencies
-4. Run `yarn start` to run function locally using an environment of `development` (configured in start script in `package.json`)
-5. Use `assume-role -e staging -n content-based-filtering -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS staging secrets locally
+2. Run `yarn` to install dependencies
+3. Run `yarn start` to run function locally using an environment of `development` (configured in start script in `package.json`)
+4. Use `assume-role -e staging -n content-based-filtering -- yarn start` (https://github.com/CruGlobal/ecs_config#assume-role) to run with AWS staging secrets locally
+
+```
+
+```
