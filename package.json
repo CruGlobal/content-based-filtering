@@ -6,6 +6,7 @@
     "start": "PROJECT_NAME=content-based-filtering ENVIRONMENT=development serverless invoke local --function handler",
     "lint": "standard || exit 0",
     "lint:fix": "standard --fix || exit 0",
+    "lint:ts": "tsc --noEmit",
     "test": "jest"
   },
   "repository": {
@@ -24,15 +25,16 @@
   "devDependencies": {
     "dotenv": "^16.0.0",
     "jest": "^27.5.1",
-    "serverless": "^3.35.2",
+    "serverless": "^3.40.0",
     "serverless-plugin-typescript": "^2.1.2",
     "standard": "^16.0.4",
-    "typescript": "^4.6.3"
+    "typescript": "^5.8.2"
   },
   "standard": {
     "env": {
       "node": true,
       "jest": true
     }
-  }
+  },
+  "packageManager": "yarn@4.7.0"
 }

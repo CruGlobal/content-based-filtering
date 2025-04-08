@@ -1,5 +1,29 @@
-# package directories
-node_modules
+# dependencies
+/node_modules
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/patches
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+yarn-error.log
+
+# IDEs and editors
+/.idea
+*.iml
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 
 # dotenv environment variables files
 *.env
