@@ -1,0 +1,58 @@
+version: 2
+
+updates:
+  # ──────────────────────────────────────────────────────────────────────────
+  # npm dependencies. Minor and patch bumps are grouped into a single
+  # weekly PR to keep review cost flat — the auto-merge workflow handles
+  # them once CI is green. Major version bumps are intentionally left
+  # ungrouped so each one gets its own PR and a proper migration check.
+  # ──────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      npm-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # GitHub Actions used by .github/workflows/**. Same policy: one batched
+  # PR per week for minor + patch bumps; majors stay per-PR so any
+  # breaking change in an action surface surfaces distinctly.
+  # ──────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Docker base images. Catches AWS Lambda base image updates and
+  # Node patch releases as PRs instead of silently going out of date.
+  # ──────────────────────────────────────────────────────────────────────────
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "docker"
+      include: "scope"
