@@ -1,8 +1,8 @@
 export interface Recommendation {
-  uri: string;
-  payload?: string;
-  payloadHash?: Number;
-  operation: OperationEnum;
+  uri: string
+  payload?: string
+  payloadHash?: string
+  operation: OperationEnum
 }
 
 export enum OperationEnum {
@@ -12,5 +12,5 @@ export enum OperationEnum {
 }
 
 export interface Lockfile {
-  [uri: string]: Recommendation['payloadHash'];
+  [uri: string]: Recommendation['payloadHash']
 }
