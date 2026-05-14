@@ -1,11 +1,12 @@
-const tableName = process.env.BIGQUERY_TABLE_NAME;
+const tableName = process.env.BIGQUERY_TABLE_NAME
 if (!tableName) {
-  throw new Error('BIGQUERY_TABLE_NAME env var was not set');
+  throw new Error('BIGQUERY_TABLE_NAME env var was not set')
 }
 
 // FARM_FINGERPRINT(...) is wrapped in ToHex(...) from https://stackoverflow.com/a/51600210/665224
-// because FARM_FINGERPRINT outputs a signed 64 bit integer instead of unsigned https://github.com/lovell/farmhash/issues/26
-// which was dropping bits when resending the hash to BigQuery and comparing
+// because FARM_FINGERPRINT outputs a signed 64 bit integer instead of unsigned
+// (https://github.com/lovell/farmhash/issues/26), which was dropping bits when
+// resending the hash to BigQuery and comparing.
 
 export const query = `
 CREATE TEMP FUNCTION ToHex(x INT64) AS (
@@ -56,4 +57,4 @@ END as operation
 FROM newData
 FULL OUTER JOIN existingData ON newData.uri = existingData.uri
 WHERE newData.payloadHash IS DISTINCT FROM existingData.payloadHash
-`;
+`

@@ -1,40 +1,33 @@
 {
   "name": "content-based-filtering",
-  "version": "1.0.0",
-  "description": "Content Based Filtering",
-  "scripts": {
-    "start": "PROJECT_NAME=content-based-filtering ENVIRONMENT=development serverless invoke local --function handler",
-    "lint": "standard || exit 0",
-    "lint:fix": "standard --fix || exit 0",
-    "lint:ts": "tsc --noEmit",
-    "test": "jest"
-  },
+  "version": "2.0.0",
+  "private": true,
+  "description": "Cru.org content recommendations: BigQuery → S3 sync Lambda",
+  "license": "BSD-3-Clause",
+  "author": "Cru <apps@cru.org>",
   "repository": {
     "type": "git",
     "url": "git@github.com:CruGlobal/content-based-filtering.git"
   },
-  "main": "src/index.ts",
-  "keywords": [],
-  "author": "Cru <apps@cru.org>",
-  "license": "BSD-3-Clause",
+  "type": "module",
+  "engines": {
+    "node": ">= 24.0.0"
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "typecheck": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
   "dependencies": {
-    "@google-cloud/bigquery": "^5.12.0",
-    "aws-sdk": "^2.1116.0",
-    "rollbar": "^2.25.0"
+    "@aws-sdk/client-s3": "^3.1046.0",
+    "@google-cloud/bigquery": "^8.3.1"
   },
   "devDependencies": {
-    "dotenv": "^16.0.0",
-    "jest": "^27.5.1",
-    "serverless": "^3.40.0",
-    "serverless-plugin-typescript": "^2.1.2",
-    "standard": "^16.0.4",
-    "typescript": "^5.8.2"
-  },
-  "standard": {
-    "env": {
-      "node": true,
-      "jest": true
-    }
-  },
-  "packageManager": "yarn@4.7.0"
+    "@types/aws-lambda": "^8.10.161",
+    "@types/node": "^25.7.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
 }

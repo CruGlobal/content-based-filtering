@@ -2,21 +2,20 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
+    branches: [main]
   workflow_dispatch:
 
 jobs:
-  typescript:
+  test:
     runs-on: ubuntu-latest
-    name: ✅ TypeScript Lint
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: .tool-versions
-      - name: 📦 Install Dependencies
-        run: yarn install
-
-      - name: ✅ TypeScript lint
-        run: yarn lint:ts
+          node-version-file: '.tool-versions'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
